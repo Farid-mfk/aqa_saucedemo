@@ -34,3 +34,6 @@ class InventoryPage(BasePage):
 
     def get_inventory_items(self):
         return self.page.locator(".inventory_item").count()
+
+    def get_inventory_item_names(self):
+        return self.page.locator(".inventory_item_name").all_text_contents()

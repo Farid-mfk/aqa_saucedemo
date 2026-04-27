@@ -11,5 +11,6 @@ class TestInv:
 
     def test_inv_002(self, login_user_page):
         """ Проверка названий всех товаров """
-        items_name = login_user_page.locator(".inventory_item_name").all_text_contents()
+        inventory_page = InventoryPage(login_user_page)
+        items_name = inventory_page.get_inventory_item_names()
         assert items_name == PRODUCTS_NAMES
