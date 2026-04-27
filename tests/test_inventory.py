@@ -1,4 +1,4 @@
-from config.products import PRODUCTS_NAMES
+from config.products import PRODUCTS_NAMES, PRODUCTS_PRICES
 from pages.inventory_page import InventoryPage
 
 class TestInv:
@@ -14,3 +14,9 @@ class TestInv:
         inventory_page = InventoryPage(login_user_page)
         items_name = inventory_page.get_inventory_item_names()
         assert items_name == PRODUCTS_NAMES
+
+    def test_inv_003(self, login_user_page):
+        """ Проверка цен всех товаров """
+        inventory_page = InventoryPage(login_user_page)
+        items_price = inventory_page.get_inventory_item_prices()
+        assert items_price == PRODUCTS_PRICES
