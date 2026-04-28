@@ -13,6 +13,10 @@ class InventoryPage(BasePage):
         self.price = self.page.locator(f"//*[text()='{BACKPACK}']/../../..//*[@class='inventory_item_price']")
         self.btn_add_to_card = self.page.locator(f"//*[text()='{BACKPACK}']/../../..//button")
         self.loc_price = "../../*[@class='inventory_item_price']"
+        self.inventory_item = self.page.locator(".inventory_item")
+        self.inventory_item_name = self.page.locator(".inventory_item_name")
+        self.inventory_item_price = self.page.locator(".inventory_item_price")
+        self.inventory_item_img = self.page.locator(".inventory_item_img")
 
     def check_backpack1_visible(self):
         expect(self.backpack1).to_be_visible()
@@ -33,10 +37,10 @@ class InventoryPage(BasePage):
         return True
 
     def get_inventory_items(self):
-        return self.page.locator(".inventory_item").count()
+        return self.inventory_item.count()
 
     def get_inventory_item_names(self):
-        return self.page.locator(".inventory_item_name").all_text_contents()
+        return self.inventory_item_name.all_text_contents()
 
     def get_inventory_item_prices(self):
         return self.page.locator(".inventory_item_price").all_text_contents()
