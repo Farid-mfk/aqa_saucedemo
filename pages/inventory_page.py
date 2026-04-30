@@ -43,4 +43,4 @@ class InventoryPage(BasePage):
         return self.inventory_item_name.all_text_contents()
 
     def get_inventory_item_prices(self):
-        return self.page.locator(".inventory_item_price").all_text_contents()
+        return self.inventory_item_price.all_text_contents()
