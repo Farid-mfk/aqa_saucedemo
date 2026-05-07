@@ -64,17 +64,14 @@ class TestInv:
         expected_name = inventory_page.get_inventory_item_names()[0]
         inventory_page.click_first_item_image()
         assert "inventory-item.html" in login_user_page.url
-        actual_name = login_user_page.locator(".inventory_details_name").inner_text()
+        actual_name = inventory_page.get_product_details_name()
         assert actual_name == expected_name
 
     def test_inv_010(self, login_user_page):
         """Проверка кнопки "Remove" после добавления в корзину"""
         inventory_page = InventoryPage(login_user_page)
         inventory_page.add_first_item_to_cart()
-        remove_button = login_user_page.locator("button:has-text('Remove')").first
-        assert remove_button.is_visible()
         assert inventory_page.get_cart_badge_count() == "1"
-        remove_button.click()
+        inventory_page.remove_first_item_from_cart()
         assert inventory_page.get_cart_badge_count() == "0"
-        add_button = login_user_page.locator("button:has-text('Add to cart')").first
-        assert add_button.is_visible()
+        assert inventory_page.is_add_button_visible()

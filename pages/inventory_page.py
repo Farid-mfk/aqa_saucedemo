@@ -22,6 +22,9 @@ class InventoryPage(BasePage):
         self.inventory_item_button = self.page.locator(".inventory_item button")
         self.shopping_cart_badge = self.page.locator(".shopping_cart_badge")
         self.inventory_item_img_link = self.page.locator(".inventory_item_img a")
+        self.inventory_details_name = self.page.locator(".inventory_details_name")
+        self.remove_first_item = self.page.locator("button:has-text('Remove')")
+        self.add_button_visible = self.page.locator("button:has-text('Add to cart')")
 
     def check_backpack1_visible(self):
         expect(self.backpack1).to_be_visible()
@@ -79,3 +82,13 @@ class InventoryPage(BasePage):
 
     def click_first_item_image(self):
         self.inventory_item_img_link.first.click()
+
+    def get_product_details_name(self):
+        return self.inventory_details_name.inner_text()
+
+    def remove_first_item_from_cart(self):
+        self.remove_first_item.first.click()
+
+    def is_add_button_visible(self):
+        return self.page.locator("button:has-text('Add to cart')").first.is_visible()
+
