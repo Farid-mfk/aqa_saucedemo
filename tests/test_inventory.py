@@ -74,4 +74,4 @@ class TestInv:
         assert inventory_page.get_cart_badge_count() == "1"
         inventory_page.remove_first_item_from_cart()
         assert inventory_page.get_cart_badge_count() == "0"
-        assert inventory_page.is_add_button_visible()
+        assert inventory_page.add_to_cart_button()
