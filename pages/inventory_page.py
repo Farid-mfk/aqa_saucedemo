@@ -90,5 +90,5 @@ class InventoryPage(BasePage):
         self.remove_first_item.first.click()
 
     def is_add_button_visible(self):
-        return self.page.locator("button:has-text('Add to cart')").first.is_visible()
+        return self.add_button_visible.first.is_visible()
 
