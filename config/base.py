@@ -1,6 +1,7 @@
 URL_BASE = "https://www.saucedemo.com"
 URL_BASE_ROOT = URL_BASE + "/"
-URL_CART = "/cart"
+URL_INV = "/inventory.html"
+URL_CART = "/cart.html"
 URL_CART_ADD = "/add"
 
 E_MSG_LOGIN = "Epic sadface: Username and password do not match any user in this service"

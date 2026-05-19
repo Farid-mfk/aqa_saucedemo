@@ -1,13 +1,22 @@
 from playwright.sync_api import expect
 
+from config.base import URL_BASE, URL_INV
 from config.products import BACKPACK
 from pages.base_page import BasePage
+from pages.cart_page import CartPage
+from pages.login_page import LoginPage
 
 
 class InventoryPage(BasePage):
 
     def __init__(self, page):
         super().__init__(page)
+        self.logout_btn = self.page.locator("#logout_sidebar_link")
+        self.burger_menu_btn = self.page.locator("#react-burger-menu-btn")
+        self.cart_icon = self.page.locator(".shopping_cart_link")
+        self.remove_button = self.page.locator("//button[text()='Remove']")
+        self.add_to_cart_buttons = self.page.locator("//button[text()='Add to cart']")
+        self.cart_badge = self.page.locator(".shopping_cart_badge")
         self.title = self.page.locator(".title")
         self.backpack1 = self.page.get_by_text(BACKPACK)
         self.price = self.page.locator(f"//*[text()='{BACKPACK}']/../../..//*[@class='inventory_item_price']")
@@ -92,3 +101,31 @@ class InventoryPage(BasePage):
     def add_to_cart_button(self):
         return self.cart_button.first.is_visible()
 
+    def verify_items_in_bucket(self, num: str):
+        expect(self.cart_badge).to_have_text(num)
+
+    def add_multiple_items_to_cart(self, count: int):
+        add_buttons = self.add_to_cart_buttons
+        for i in range(count):
+            add_buttons.nth(i).click()
+
+    def verify_first_item_button_is_remove(self):
+        expect(self.remove_button).to_have_text("Remove")
+
+    def verify_bucket_is_empty(self):
+        expect(self.cart_badge).to_be_hidden()
+
+    def click_cart_icon(self) -> CartPage:
+        self.cart_icon.click()
+        return CartPage(self.page)
+
+    def verify_inventory_page_url(self):
+        expect(self.page).to_have_url(f"{URL_BASE + URL_INV}")
+
+    def reload_page(self):
+        self.page.reload()
+
+    def logout(self):
+        self.burger_menu_btn.click()
+        self.logout_btn.click()
+        return LoginPage(self.page)

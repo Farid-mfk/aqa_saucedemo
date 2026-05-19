@@ -11,7 +11,7 @@ def page():
     with sync_playwright() as drv:
         browser = drv.chromium.launch(headless=False, slow_mo=500)
         page = browser.new_page()
-        page.set_default_timeout(3_000)
+        page.set_default_timeout(5_000)
         page.goto(URL_BASE)
         yield page
         browser.close()
