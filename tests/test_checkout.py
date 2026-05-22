@@ -1,7 +1,9 @@
 import allure
+import pytest
 
 from pages.inventory_page import InventoryPage
 from playwright.sync_api import expect
+from pages.checkout_page import CheckoutOverviewPage
 
 
 @allure.feature("Checkout")
@@ -14,48 +16,38 @@ class TestCheckout:
         inventory_page.add_first_item_to_cart()
         cart_page = inventory_page.click_cart_icon()
         checkout_page = cart_page.click_checkout_button()
-        checkout_page.fill_first_name("Farid")
-        checkout_page.fill_last_name("Muborakshoev")
-        checkout_page.fill_postal_code("12345")
-        checkout_overview_page = checkout_page.click_continue()
+        checkout_page.fill_checkout_form(first_name="Farid", last_name="Muborakshoev", postal_code="12345")
+        checkout_page.click_continue()
+        checkout_overview_page = CheckoutOverviewPage(login_user_page)
         checkout_complete_page = checkout_overview_page.click_finish()
         checkout_complete_page.verify_checkout_complete_message()
 
-    @allure.title("Чекаут с пустым First name")
+    @pytest.mark.parametrize(
+        "first_name, last_name, postal_code, expected_error",
+        [
+            ("", "Muborakshoev", "12345", "Error: First Name is required"),
+            ("Farid", "", "12345", "Error: Last Name is required"),
+            ("Farid", "Muborakshoev", "", "Error: Postal Code is required"),
+        ],
+        ids=["Empty First Name", "Empty Last Name", "Empty Postal Code"]
+    )
+    @allure.title("Негативный чекаут: {ids}")
     @allure.severity(allure.severity_level.NORMAL)
-    def test_checkout_002(self, login_user_page):
+    def test_checkout_002_003_004(self, login_user_page, first_name, last_name, postal_code, expected_error):
         inventory_page = InventoryPage(login_user_page)
         inventory_page.add_first_item_to_cart()
-        cart_page = inventory_page.click_cart_icon()
-        checkout_page = cart_page.click_checkout_button()
-        checkout_page.fill_last_name("Muborakshoev")
-        checkout_page.fill_postal_code("12345")
-        checkout_page.click_continue_with_error()
-        checkout_page.verify_error_message("Error: First Name is required")
 
-    @allure.title("Чекаут с пустым Last name")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_checkout_003(self, login_user_page):
-        inventory_page = InventoryPage(login_user_page)
-        inventory_page.add_first_item_to_cart()
         cart_page = inventory_page.click_cart_icon()
         checkout_page = cart_page.click_checkout_button()
-        checkout_page.fill_first_name("Farid")
-        checkout_page.fill_postal_code("12345")
-        checkout_page.click_continue_with_error()
-        checkout_page.verify_error_message("Error: Last Name is required")
 
-    @allure.title("Чекаут с пустым Postal code")
-    @allure.severity(allure.severity_level.NORMAL)
-    def test_checkout_004(self, login_user_page):
-        inventory_page = InventoryPage(login_user_page)
-        inventory_page.add_first_item_to_cart()
-        cart_page = inventory_page.click_cart_icon()
-        checkout_page = cart_page.click_checkout_button()
-        checkout_page.fill_first_name("Farid")
-        checkout_page.fill_last_name("Muborakshoev")
-        checkout_page.click_continue_with_error()
-        checkout_page.verify_error_message("Error: Postal Code is required")
+        checkout_page.fill_checkout_form(
+            first_name=first_name,
+            last_name=last_name,
+            postal_code=postal_code
+        )
+
+        checkout_page.click_continue()
+        checkout_page.verify_error_message(expected_error)
 
     @allure.title("Валидация Postal code (формат)")
     @allure.severity(allure.severity_level.MINOR)
@@ -64,10 +56,9 @@ class TestCheckout:
         inventory_page.add_first_item_to_cart()
         cart_page = inventory_page.click_cart_icon()
         checkout_page = cart_page.click_checkout_button()
-        checkout_page.fill_first_name("Farid")
-        checkout_page.fill_last_name("Muborakshoev")
-        checkout_page.fill_postal_code("ABCDE")
-        checkout_overview_page = checkout_page.click_continue()
+        checkout_page.fill_checkout_form(first_name="Farid", last_name="Muborakshoev", postal_code="12345")
+        checkout_page.click_continue()
+        checkout_overview_page = CheckoutOverviewPage(login_user_page)
         expect(checkout_overview_page.finish_button).to_be_visible()
 
     @allure.title("Возврат к корзине из шага 1 чекаута")
@@ -99,10 +90,9 @@ class TestCheckout:
         inventory_page.add_first_item_to_cart()
         cart_page = inventory_page.click_cart_icon()
         checkout_page = cart_page.click_checkout_button()
-        checkout_page.fill_first_name("Farid")
-        checkout_page.fill_last_name("Muborakshoev")
-        checkout_page.fill_postal_code("12345")
-        checkout_overview_page = checkout_page.click_continue()
+        checkout_page.fill_checkout_form(first_name="Farid", last_name="Muborakshoev", postal_code="12345")
+        checkout_page.click_continue()
+        checkout_overview_page = CheckoutOverviewPage(login_user_page)
         checkout_overview_page.verify_total_calculation()
 
     @allure.title("Округление копеек (граничный случай)")
@@ -110,34 +100,21 @@ class TestCheckout:
     def test_checkout_009(self, login_user_page):
         inventory_page = InventoryPage(login_user_page)
         inventory_page.add_first_item_to_cart()
-
         cart_page = inventory_page.click_cart_icon()
         checkout_page = cart_page.click_checkout_button()
-
-        checkout_page.fill_first_name("Farid")
-        checkout_page.fill_last_name("Muborakshoev")
-        checkout_page.fill_postal_code("12345")
-
-        checkout_overview_page = checkout_page.click_continue()
-
-        # Проверяем, что на странице значения сумм округлены до формата .XX
+        checkout_page.fill_checkout_form(first_name="Farid", last_name="Muborakshoev", postal_code="12345")
+        checkout_page.click_continue()
+        checkout_overview_page = CheckoutOverviewPage(login_user_page)
         checkout_overview_page.verify_prices_format()
 
     @allure.title("Чекаут с несколькими товарами")
     @allure.severity(allure.severity_level.NORMAL)
     def test_checkout_010(self, login_user_page):
         inventory_page = InventoryPage(login_user_page)
-        # Добавляем ровно 3 разных товара в корзину
         inventory_page.add_multiple_items_to_cart(count=3)
-
         cart_page = inventory_page.click_cart_icon()
         checkout_page = cart_page.click_checkout_button()
-
-        checkout_page.fill_first_name("Farid")
-        checkout_page.fill_last_name("Muborakshoev")
-        checkout_page.fill_postal_code("12345")
-
-        checkout_overview_page = checkout_page.click_continue()
-
-        # Проверяем количество товаров, сходимость их цен и финальную сумму
+        checkout_page.fill_checkout_form(first_name="Farid", last_name="Muborakshoev", postal_code="12345")
+        checkout_page.click_continue()
+        checkout_overview_page = CheckoutOverviewPage(login_user_page)
         checkout_overview_page.verify_multiple_items_checkout(expected_count=3)

@@ -30,7 +30,6 @@ class CheckoutPage(BasePage):
     @allure.step("Нажать кнопку 'Continue' (успешный переход)")
     def click_continue(self):
         self.continue_button.click()
-        return CheckoutOverviewPage(self.page)
 
     @allure.step("Нажать кнопку 'Continue' (ожидание ошибки)")
     def click_continue_with_error(self):
@@ -45,6 +44,12 @@ class CheckoutPage(BasePage):
         self.cancel_button.click()
         from pages.cart_page import CartPage
         return CartPage(self.page)
+
+    @allure.step("Заполнить форму чекаута: имя='{first_name}', фамилия='{last_name}', индекс='{postal_code}'")
+    def fill_checkout_form(self, first_name: str = "", last_name: str = "", postal_code: str = ""):
+        self.first_name_input.fill(first_name)
+        self.last_name_input.fill(last_name)
+        self.postal_code_input.fill(postal_code)
 
 
 class CheckoutOverviewPage(BasePage):
