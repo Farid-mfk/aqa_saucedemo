@@ -42,8 +42,6 @@ class CheckoutPage(BasePage):
     @allure.step("Нажать кнопку 'Cancel' на шаге чекаута")
     def click_cancel(self):
         self.cancel_button.click()
-        from pages.cart_page import CartPage
-        return CartPage(self.page)
 
     @allure.step("Заполнить форму чекаута: имя='{first_name}', фамилия='{last_name}', индекс='{postal_code}'")
     def fill_checkout_form(self, first_name: str = "", last_name: str = "", postal_code: str = ""):
@@ -65,11 +63,11 @@ class CheckoutOverviewPage(BasePage):
 
     def click_finish(self):
         self.finish_button.click()
-        return CheckoutCompletePage(self.page)
 
     def get_item_total(self) -> float:
         text = self.item_total_label.text_content()
         return float(text.split("$")[1])
+
 
     def get_tax(self) -> float:
         text = self.tax_label.text_content()

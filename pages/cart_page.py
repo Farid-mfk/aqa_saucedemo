@@ -27,5 +27,3 @@ class CartPage(BasePage):
     @allure.step("Нажать кнопку 'Checkout'")
     def click_checkout_button(self):
         self.checkout_button.click()
-        from pages.checkout_page import CheckoutPage
-        return CheckoutPage(self.page)
