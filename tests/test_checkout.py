@@ -2,6 +2,7 @@ import allure
 import pytest
 from playwright.sync_api import expect
 
+from config.users import FIRST_NAME, LAST_NAME, POSTAL_CODE, INVALID_POSTAL_CODE
 from pages.inventory_page import InventoryPage
 from pages.cart_page import CartPage
 from pages.checkout_page import CheckoutPage, CheckoutOverviewPage, CheckoutCompletePage
@@ -21,7 +22,7 @@ class TestCheckout:
         cart_page.click_checkout_button()
 
         checkout_page = CheckoutPage(login_user_page)
-        checkout_page.fill_checkout_form(first_name="Farid", last_name="Muborakshoev", postal_code="12345")
+        checkout_page.fill_checkout_form(first_name=FIRST_NAME, last_name=LAST_NAME, postal_code=POSTAL_CODE)
         checkout_page.click_continue()
 
         checkout_overview_page = CheckoutOverviewPage(login_user_page)
@@ -33,9 +34,9 @@ class TestCheckout:
     @pytest.mark.parametrize(
         "first_name, last_name, postal_code, expected_error",
         [
-            ("", "Muborakshoev", "12345", "Error: First Name is required"),
-            ("Farid", "", "12345", "Error: Last Name is required"),
-            ("Farid", "Muborakshoev", "", "Error: Postal Code is required"),
+            ("", LAST_NAME, POSTAL_CODE, "Error: First Name is required"),
+            (FIRST_NAME, "", POSTAL_CODE, "Error: Last Name is required"),
+            (FIRST_NAME, LAST_NAME, "", "Error: Postal Code is required"),
         ],
         ids=["Empty First Name", "Empty Last Name", "Empty Postal Code"]
     )
@@ -65,7 +66,7 @@ class TestCheckout:
         cart_page.click_checkout_button()
 
         checkout_page = CheckoutPage(login_user_page)
-        checkout_page.fill_checkout_form(first_name="Farid", last_name="Muborakshoev", postal_code="ABCDE")
+        checkout_page.fill_checkout_form(first_name=FIRST_NAME, last_name=LAST_NAME, postal_code=INVALID_POSTAL_CODE)
         checkout_page.click_continue()
 
         checkout_overview_page = CheckoutOverviewPage(login_user_page)
@@ -117,7 +118,7 @@ class TestCheckout:
         cart_page.click_checkout_button()
 
         checkout_page = CheckoutPage(login_user_page)
-        checkout_page.fill_checkout_form(first_name="Farid", last_name="Muborakshoev", postal_code="12345")
+        checkout_page.fill_checkout_form(first_name=FIRST_NAME, last_name=LAST_NAME, postal_code=POSTAL_CODE)
         checkout_page.click_continue()
 
         checkout_overview_page = CheckoutOverviewPage(login_user_page)
@@ -134,7 +135,7 @@ class TestCheckout:
         cart_page.click_checkout_button()
 
         checkout_page = CheckoutPage(login_user_page)
-        checkout_page.fill_checkout_form(first_name="Farid", last_name="Muborakshoev", postal_code="12345")
+        checkout_page.fill_checkout_form(first_name=FIRST_NAME, last_name=LAST_NAME, postal_code=POSTAL_CODE)
         checkout_page.click_continue()
 
         checkout_overview_page = CheckoutOverviewPage(login_user_page)
@@ -151,7 +152,7 @@ class TestCheckout:
         cart_page.click_checkout_button()
 
         checkout_page = CheckoutPage(login_user_page)
-        checkout_page.fill_checkout_form(first_name="Farid", last_name="Muborakshoev", postal_code="12345")
+        checkout_page.fill_checkout_form(first_name=FIRST_NAME, last_name=LAST_NAME, postal_code=POSTAL_CODE)
         checkout_page.click_continue()
 
         checkout_overview_page = CheckoutOverviewPage(login_user_page)
