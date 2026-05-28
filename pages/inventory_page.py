@@ -34,6 +34,13 @@ class InventoryPage(BasePage):
         self.inventory_details_name = self.page.locator(".inventory_details_name")
         self.remove_first_item = self.page.locator("button:has-text('Remove')")
         self.cart_button = self.page.locator("button:has-text('Add to cart')")
+        self.app_logo = self.page.locator(".app_logo")
+        self.burger_menu_button = self.page.locator("#react-burger-menu-btn")
+        self.close_burger_menu_button = self.page.locator("#react-burger-cross-btn")
+        self.all_items_link = self.page.locator("#inventory_sidebar_link")
+        self.about_link = self.page.locator("#about_sidebar_link")
+        self.logout_link = self.page.locator("#logout_sidebar_link")
+        self.reset_link = self.page.locator("#reset_sidebar_link")
 
     def check_backpack1_visible(self):
         expect(self.backpack1).to_be_visible()
@@ -129,3 +136,18 @@ class InventoryPage(BasePage):
         self.burger_menu_btn.click()
         self.logout_btn.click()
         return LoginPage(self.page)
+
+    def click_app_logo(self):
+        self.app_logo.click()
+
+    def open_burger_menu(self):
+        self.burger_menu_button.click()
+
+    def close_burger_menu(self):
+        self.close_burger_menu_button.click()
+
+    def check_menu_items_visible(self):
+        expect(self.all_items_link).to_be_visible()
+        expect(self.about_link).to_be_visible()
+        expect(self.logout_link).to_be_visible()
+        expect(self.reset_link).to_be_visible()
