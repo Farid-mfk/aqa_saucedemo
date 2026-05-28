@@ -145,3 +145,9 @@ class InventoryPage(BasePage):
 
     def close_burger_menu(self):
         self.close_burger_menu_button.click()
+
+    def check_menu_items_visible(self):
+        expect(self.all_items_link).to_be_visible()
+        expect(self.about_link).to_be_visible()
+        expect(self.logout_link).to_be_visible()
+        expect(self.reset_link).to_be_visible()

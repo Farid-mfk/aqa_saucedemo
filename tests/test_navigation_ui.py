@@ -24,10 +24,7 @@ class TestNavigationUI:
 
         inventory_page.open_burger_menu()
 
-        expect(inventory_page.all_items_link).to_be_visible()
-        expect(inventory_page.about_link).to_be_visible()
-        expect(inventory_page.logout_link).to_be_visible()
-        expect(inventory_page.reset_link).to_be_visible()
+        inventory_page.check_menu_items_visible()
 
         inventory_page.close_burger_menu()
         expect(inventory_page.all_items_link).not_to_be_visible()
@@ -76,4 +73,5 @@ class TestNavigationUI:
     @allure.severity(allure.severity_level.NORMAL)
     def test_ui_010_page_not_found(self, login_user_page):
         response = login_user_page.goto(f"{URL_BASE}/qwerty")
-        assert response.status == 200 or response.status == 404
+        assert response.status in (200, 404), \
+            f"Ожидался 200 или 404, но получен: {response.status}"
