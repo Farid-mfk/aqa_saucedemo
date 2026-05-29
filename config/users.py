@@ -1,0 +1,10 @@
+USER1_NAME = "standard_user"
+USER2_NAME = "problem_user"
+USERS_PASSWORD = "secret_sauce"
+USER_FAKE_NAME = "fake_user"
+USERS_FAKE_PASSWORD = "fake_password"
+
+FIRST_NAME = "Farid"
+LAST_NAME = "Muborakshoev"
+POSTAL_CODE = "12345"
+INVALID_POSTAL_CODE = "ABCDE"
