@@ -9,7 +9,7 @@ from pages.login_page import LoginPage
 @pytest.fixture(scope="function")
 def browser_instance():
     with sync_playwright() as drv:
-        browser = drv.chromium.launch(headless=False, slow_mo=500)
+        browser = drv.chromium.launch(headless=True, slow_mo=500)
         yield browser
         browser.close()
 
